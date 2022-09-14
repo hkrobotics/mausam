@@ -84,12 +84,12 @@ function Home() {
           `${OWM_API_URL}/weather?q=${city}&units=metric&appid=${OWM_API_KEY}`
         )
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           setData(res.data);
-          setLoading(false);
         })
         .then(() => {
-          console.log("data fetched");
+          // console.log("data fetched");
+          setLoading(false);
         })
         .catch(() => {
           setLoading(false);
@@ -113,16 +113,33 @@ function Home() {
   }, [city]);
 
   useEffect(() => {
-    const getCoords = () => {
-      navigator.geolocation.getCurrentPosition(function (position) {
-        setLat(position.coords.latitude);
-        setLong(position.coords.longitude);
-        console.log("Latitude is:", lat);
-        console.log("Longitude is:", long);
-      });
-    };
+    const getCoords = async () => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLat(position.coords.latitude);
+          setLong(position.coords.longitude);
+          console.log("Latitude is:", lat);
+          console.log("Longitude is:", long);
+        },
+        (error) => {
+          // console.log(error);
+          if (error.code === 1) {
+            console.warn(
+              "Hey! 👋 You've denied to share your location 🗺️\n I am not Facebook and ain't not going to track you! 🕵️‍♂️\n Fun Fact : You can't use this app efficiently without sharing your location 🤷‍♂️ \n So please allow me to access your location 🙏 \n Thank you! 😊"
+            );
 
-    getCoords();
+            console.log(
+              "To enable location sharing, please follow these steps: \n 1. You see that little lock icon on the left side of the URL bar? Click on it. \n 2. Select 'Always allow' from the dropdown menu. \n 3. Refresh the page. \n 4. You're done! 😊"
+            );
+
+            console.log(
+              "If this app is still not working properly, then don't blame me! 😂\nBlame him https://hkrobotics.github.io"
+            );
+          }
+          setCity("Mumbai");
+        }
+      );
+    };
 
     if (long !== undefined && lat !== undefined) {
       setLoading(true);
@@ -132,8 +149,8 @@ function Home() {
           `${OWM_API_URL}/weather?lat=${lat}&lon=${long}&units=metric&appid=${OWM_API_KEY}`
         )
         .then((res) => {
-          console.log(res.data);
-          console.log("fetched by coords");
+          // console.log(res.data);
+          // console.log("fetched by coords");
           setData(res.data);
           setLoading(false);
         })
@@ -156,6 +173,8 @@ function Home() {
           setData(dummyData);
         });
     }
+
+    getCoords();
   }, [lat, long]);
 
   return (
