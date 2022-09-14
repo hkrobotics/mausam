@@ -117,7 +117,7 @@ const WeatherSVGContainer = styled.div`
 
 const WeatherSVG = styled.img`
   width: 12rem;
-  // height: 12rem;
+  height: 12rem;
 `;
 
 const MainTempLeftContainer = styled.div``;

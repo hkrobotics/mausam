@@ -132,7 +132,6 @@ function Home() {
     // }, [long, lat]);
   }, [city]);
 
-  console.log(data);
   return (
     <>
       {/* <h1>{location}</h1> */}
