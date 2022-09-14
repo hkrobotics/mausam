@@ -104,6 +104,7 @@ function SearchBar({ city, setCity }) {
                 handleSubmit(e);
               }
             }}
+            autoComplete="off"
             value={search}
           />
           <IconButton

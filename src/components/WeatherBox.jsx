@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Chip from "@mui/material/Chip";
 import Avatar from "@mui/material/Avatar";
@@ -29,6 +29,10 @@ import snowSVG from "../assets/svg/snow.svg";
 
 import foggSVG from "../assets/svg/foggy.svg";
 import foggNSVG from "../assets/svg/foggyN.svg";
+
+import Moment from "react-moment";
+import dateFormat, { masks } from "dateformat";
+import { useState } from "react";
 
 const getWeatherIcon = (weatherData) => {
   const weatherIconsDay = {
@@ -147,12 +151,57 @@ const WeatherDescription = styled.div`
 // };
 
 function WeatherBox({ weatherData }) {
+  const [iconURL, setIconURL] = React.useState(clearSVG);
+
+  const [myDate, setMyDate] = useState("24 January, 12:00 am");
+
+  useEffect(() => {
+    const milliseconds = weatherData.dt;
+    const dateObject = new Date(milliseconds * 1000);
+    const humanDateFormat = dateObject.toString();
+    const myDateFormat = dateFormat(humanDateFormat, "dd mmmm, h:MM tt");
+    setMyDate(myDateFormat);
+    // console.log(myDateFormat, weatherData.dt, dateObject);
+
+    //format guide
+    //Tuesday, January 20th, 1970, 11:29:33 AM //dddd, mmmm dS, yyyy, h:MM:ss TT
+    //13 September, 7:40 am //dd mmmm, h:MM tt
+  }, [weatherData.dt]);
+
+  useEffect(() => {
+    const weatherIconsDay = {
+      "01d": clearSVG,
+      "02d": fewCloudsSVG,
+      "03d": scatteredCloudsSVG,
+      "04d": cloudSVG,
+      "09d": showerRainSVG,
+      "10d": rainSVG,
+      "11d": thunderstormSVG,
+      "13d": snowSVG,
+      "50d": foggSVG,
+
+      "01n": clearNSVG,
+      "02n": fewCloudsNSVG,
+      "03n": scatteredCloudsNSVG,
+      "04n": cloudSVG,
+      "09n": showerRainNSVG,
+      "10n": rainNSVG,
+      "11n": thunderstormNSVG,
+      "13n": snowSVG,
+      "50n": foggNSVG,
+    };
+
+    const icon = weatherData.weather[0].icon;
+    setIconURL(weatherIconsDay[icon]);
+  }, [weatherData.weather[0].icon]);
   return (
     <>
       <BoxContainer>
         <MainTempContainer>
           <MainTempLeftContainer>
-            <MainTempDate>13 September, 7:40 am</MainTempDate>
+            {/* <MainTempDate>13 September, 7:40 am</MainTempDate> */}
+            <MainTempDate>{myDate}</MainTempDate>
+
             <MainTemTopText>
               Day{" "}
               {Math.ceil(
@@ -164,6 +213,11 @@ function WeatherBox({ weatherData }) {
               ) + "°"}{" "}
               ⬇
             </MainTemTopText>
+            {/* <MainTemTopText>
+              Humidity {Math.ceil(weatherData.main.humidity) + "% "}∘ Pressure{" "}
+              {Math.round((weatherData.main.pressure / 1013) * 100) / 100 +
+                " atm"}
+            </MainTemTopText> */}
             <MainTempText>
               {weatherData
                 ? Math.round(weatherData.main.temp) /*"°ᶜ"*/ + "°ᶜ"
@@ -175,7 +229,7 @@ function WeatherBox({ weatherData }) {
           </MainTempLeftContainer>
         </MainTempContainer>
         <WeatherSVGContainer>
-          <WeatherSVG src={getWeatherIcon(weatherData)} alt="sunny svg" />
+          <WeatherSVG src={iconURL} alt="sunny svg" />
           {/* <WeatherSVG src={foggNSVG} alt="sunny svg" /> */}
           <WeatherDescription style={{ textTransform: "capitalize" }}>
             {weatherData.weather[0].description}

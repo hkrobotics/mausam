@@ -4,6 +4,9 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import Weather from "./Weather/Weather";
 
+import Box from "@mui/material/Box";
+import LinearProgress from "@mui/material/LinearProgress";
+
 function Home() {
   const [dummyData, setdummyData] = useState({
     coord: {
@@ -58,6 +61,8 @@ function Home() {
   const [lat, setLat] = useState();
   const [long, setLong] = useState();
   const [data, setData] = useState();
+
+  const [loading, setLoading] = useState(true);
 
   const [city, setCity] = useState("mumbai");
 
@@ -115,6 +120,8 @@ function Home() {
         setLong(position.coords.longitude);
       });
 
+      setLoading(true);
+
       await axios
         .get(
           //   `${OWM_API_URL}/weather?lat=${lat}&lon=${long}&units=metric&appid=${MAUSAM_API_KEY}`
@@ -125,6 +132,29 @@ function Home() {
           console.log(res.data);
           console.log(city);
           setData(res.data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          if (err.response.status === 404) {
+            // alert("City not found");
+          }
+
+          setLoading(false);
+
+          dummyData.name = "City Not Found";
+          dummyData.main.temp = "00";
+          dummyData.weather[0].description = "N/A";
+          dummyData.weather[0].icon = "01d";
+          dummyData.main.feels_like = "00";
+          dummyData.main.temp_min = "00";
+          dummyData.main.temp_max = "00";
+          dummyData.sys.country = "Earth";
+          dummyData.main.humidity = "00";
+          dummyData.main.pressure = "00";
+
+          dummyData.dt = 948652200;
+
+          setData(dummyData);
         });
     };
 
@@ -132,11 +162,23 @@ function Home() {
     // }, [long, lat]);
   }, [city]);
 
+  useEffect(() => {
+    if (location) {
+      setCity(location);
+    }
+  }, [location]);
+
   return (
     <>
       {/* <h1>{location}</h1> */}
       {data !== undefined ? (
-        <Weather weatherData={data} city={city} setCity={setCity} />
+        <Weather
+          weatherData={data}
+          city={city}
+          setCity={setCity}
+          loading={loading}
+          setLoading={setLoading}
+        />
       ) : (
         <div></div>
       )}
