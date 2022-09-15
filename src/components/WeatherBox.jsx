@@ -168,7 +168,10 @@ const MainTempLeftContainer = styled.div`
 
 const MainTempBottomText = styled.p`
   font-size: 1.5rem;
-  align-self: flex-end;
+  align-self: flex-start;
+  @media ${device.tablet} {
+    align-self: flex-end;
+  }
 `;
 
 const MainTemTopText = styled.p`
