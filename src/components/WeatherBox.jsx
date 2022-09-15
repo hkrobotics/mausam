@@ -32,6 +32,9 @@ import foggNSVG from "../assets/svg/foggyN.svg";
 
 import Moment from "react-moment";
 import dateFormat, { masks } from "dateformat";
+
+import { device } from "../helper/breakpoints";
+
 import { useState } from "react";
 
 const getWeatherIcon = (weatherData) => {
@@ -86,17 +89,37 @@ const BoxContainer = styled.div`
   justify-content: center;
   margin: 2rem auto 2rem;
   align-items: center;
-  flex-wrap: wrap;
-  flex-direction: reverse;
+  // flex-wrap: wrap;
+  // flex-direction: reverse;
   max-width: 800px;
 
-  justify-content: space-between;
+  justify-content: space-around;
 
   // height: 12rem;
 `;
 
+const BoxContainerChild = styled.div`
+  display: flex;
+  justify-content: center;
+
+  flex-wrap: wrap;
+
+  width: 100%;
+  justify-content: space-between;
+
+  @media (max-width: 864px) {
+    margin: 0 2rem 0;
+  }
+
+  //here i am using the Desktop first approach hence using max-width media query
+  @media ${device.tablet} {
+    flex-direction: column-reverse;
+  }
+`;
+
 const MainTempContainer = styled.div`
   display: flex;
+  justify-content: center;
 `;
 
 const MainTempText = styled.h2`
@@ -104,6 +127,10 @@ const MainTempText = styled.h2`
   font-size: 12rem;
   line-height: 1;
   font-weight: 600;
+
+  @media ${device.mobileL} {
+    font-size: 10rem;
+  }
 `;
 const MainTempSuperscript = styled.div`
   font-size: 4rem;
@@ -117,25 +144,41 @@ const WeatherSVGContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+
+  @media ${device.tablet} {
+    align-items: center;
+    margin-bottom: 2rem;
+  }
 `;
 
 const WeatherSVG = styled.img`
   width: 12rem;
   height: 12rem;
+
+  @media ${device.tablet} {
+    width: 22rem;
+    // height: 8rem;
+  }
 `;
 
-const MainTempLeftContainer = styled.div``;
+const MainTempLeftContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 const MainTempBottomText = styled.p`
   font-size: 1.5rem;
+  align-self: flex-end;
 `;
 
 const MainTemTopText = styled.p`
   font-size: 1.5rem;
+  align-self: flex-start;
 `;
 
 const MainTempDate = styled.p`
   font-size: 0.8rem;
+  align-self: flex-start;
 `;
 
 const WeatherLocation = styled.div`
@@ -197,47 +240,52 @@ function WeatherBox({ weatherData }) {
   return (
     <>
       <BoxContainer>
-        <MainTempContainer>
-          <MainTempLeftContainer>
-            {/* <MainTempDate>13 September, 7:40 am</MainTempDate> */}
-            <MainTempDate>{myDate}</MainTempDate>
+        <BoxContainerChild>
+          <MainTempContainer>
+            <MainTempLeftContainer>
+              {/* <MainTempDate>13 September, 7:40 am</MainTempDate> */}
+              <MainTempDate>{myDate}</MainTempDate>
 
-            <MainTemTopText>
-              Day{" "}
-              {Math.ceil(
-                Math.max(weatherData.main.feels_like, weatherData.main.temp_max)
-              ) + "°"}
-              ⬆ ∘ Night{" "}
-              {Math.floor(
-                Math.min(weatherData.main.temp_min, weatherData.main.temp)
-              ) + "°"}{" "}
-              ⬇
-            </MainTemTopText>
-            {/* <MainTemTopText>
-              Humidity {Math.ceil(weatherData.main.humidity) + "% "}∘ Pressure{" "}
-              {Math.round((weatherData.main.pressure / 1013) * 100) / 100 +
-                " atm"}
-            </MainTemTopText> */}
-            <MainTempText>
-              {weatherData
-                ? Math.round(weatherData.main.temp) /*"°ᶜ"*/ + "°ᶜ"
-                : "69°ᶜ"}
-            </MainTempText>
-            <MainTempBottomText>
-              Feels like {Math.round(weatherData.main.feels_like) + "°"}
-            </MainTempBottomText>
-          </MainTempLeftContainer>
-        </MainTempContainer>
-        <WeatherSVGContainer>
-          <WeatherSVG src={iconURL} alt="sunny svg" />
-          {/* <WeatherSVG src={foggNSVG} alt="sunny svg" /> */}
-          <WeatherDescription style={{ textTransform: "capitalize" }}>
-            {weatherData.weather[0].description}
-          </WeatherDescription>
-          <WeatherLocation>
-            {weatherData.name + ", " + weatherData.sys.country}
-          </WeatherLocation>
-        </WeatherSVGContainer>
+              <MainTemTopText>
+                Day{" "}
+                {Math.ceil(
+                  Math.max(
+                    weatherData.main.feels_like,
+                    weatherData.main.temp_max
+                  )
+                ) + "°"}
+                ⬆ ∘ Night{" "}
+                {Math.floor(
+                  Math.min(weatherData.main.temp_min, weatherData.main.temp)
+                ) + "°"}{" "}
+                ⬇
+              </MainTemTopText>
+              {/* <MainTemTopText>
+                Humidity {Math.ceil(weatherData.main.humidity) + "% "}∘ Pressure{" "}
+                {Math.round((weatherData.main.pressure / 1013) * 100) / 100 +
+                  " atm"}
+              </MainTemTopText> */}
+              <MainTempText>
+                {weatherData
+                  ? Math.round(weatherData.main.temp) /*"°ᶜ"*/ + "°ᶜ"
+                  : "69°ᶜ"}
+              </MainTempText>
+              <MainTempBottomText>
+                Feels like {Math.round(weatherData.main.feels_like) + "°"}
+              </MainTempBottomText>
+            </MainTempLeftContainer>
+          </MainTempContainer>
+          <WeatherSVGContainer>
+            <WeatherSVG src={iconURL} alt="sunny svg" />
+            {/* <WeatherSVG src={foggNSVG} alt="sunny svg" /> */}
+            <WeatherDescription style={{ textTransform: "capitalize" }}>
+              {weatherData.weather[0].description}
+            </WeatherDescription>
+            <WeatherLocation>
+              {weatherData.name + ", " + weatherData.sys.country}
+            </WeatherLocation>
+          </WeatherSVGContainer>
+        </BoxContainerChild>
       </BoxContainer>
     </>
   );
