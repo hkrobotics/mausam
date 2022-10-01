@@ -3,7 +3,7 @@
 
 # Mausam
 
-A Weather app inspired by Material Design 3.0 made using ReactJS and OpenWeatherMap API.
+This is a Weather app inspired by Material Design 3.0 and made using ReactJS and OpenWeatherMap API. The app uses React for the front-end, MUI for the Material UI design, and OpenWeatherMap API to fetch weather data. The app also uses the Geolocation API to get the user's current location.
 
 
 ## Screenshots
