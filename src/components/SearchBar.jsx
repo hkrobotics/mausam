@@ -79,14 +79,12 @@ function SearchBar({ city, setCity }) {
             sx={{ p: '10px', color: 'orange' }}
             aria-label="directions"
             onClick={handleLocationToggle}
-            id="weatherIcon"
           >
             {/* <CloudIcon /> */}
             <SunnyIcon />
           </IconButton>
 
           <InputBase
-            id="search"
             sx={{ ml: 1, flex: 1, color: '#205107' }}
             placeholder="Search your location"
             inputProps={{ 'aria-label': 'search your location' }}
@@ -100,15 +98,12 @@ function SearchBar({ city, setCity }) {
             }}
             autoComplete="off"
             value={search}
-            name="search"
           />
           <IconButton
             // color="success"
             type="button"
             sx={{ p: '10px', color: '#205107' }}
             aria-label="search"
-            id="search-button"
-            className="search-button"
           >
             <SearchIcon />
           </IconButton>
