@@ -8,6 +8,7 @@ import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 
 function Home() {
+  
   const [dummyData, setdummyData] = useState({
     coord: {
       lon: 75.3333,
@@ -62,6 +63,7 @@ function Home() {
   const [long, setLong] = useState();
   const [data, setData] = useState();
 
+  const [oneCallData, setOneCallData] = useState();
   const [loading, setLoading] = useState(true);
 
   const [city, setCity] = useState("");
@@ -89,9 +91,22 @@ function Home() {
         })
         .then(() => {
           // console.log("data fetched");
-          setLoading(false);
+          axios
+            .get(
+              `${OWM_API_URL}/forecast?q=${city}&units=metric&appid=${OWM_API_KEY}`
+            )
+            .then((res) => {
+              console.log(res.data);
+              setOneCallData(res.data);
+            })
+            .then(() => {
+              setLoading(false);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         })
-        .catch(() => {
+        .catch((err) => {
           setLoading(false);
 
           dummyData.name = "City Not Found";
@@ -108,6 +123,14 @@ function Home() {
           dummyData.dt = 948652200;
 
           setData(dummyData);
+
+          if (err.response.status === 401) {
+            console.err("Invalid API Key 🗝️");
+          } else if (err.response.status === 404) {
+            console.error("City Not Found 🗺️");
+          } else {
+            console.error("Something went wrong 🤷‍♂️");
+          }
         });
     }
   }, [city]);
@@ -152,7 +175,23 @@ function Home() {
           // console.log(res.data);
           // console.log("fetched by coords");
           setData(res.data);
-          setLoading(false);
+        })
+        .then(() => {
+          axios
+            .get(
+              `${OWM_API_URL}/forecast?lat=${lat}&lon=${long}&units=metric&appid=${OWM_API_KEY}`
+            )
+            .then((res) => {
+              console.log(res.data);
+              setOneCallData(res.data);
+            })
+            .then(() => {
+              setLoading(false);
+            })
+            .catch((err) => {
+              console.log(err);
+              setLoading(false);
+            });
         })
         .catch((err) => {
           setLoading(false);
@@ -171,6 +210,14 @@ function Home() {
           dummyData.dt = 948652200;
 
           setData(dummyData);
+
+          if (err.response.status === 401) {
+            console.error("Invalid API Key 🗝️");
+          } else if (err.response.status === 404) {
+            console.error("City Not Found 🗺️");
+          } else {
+            console.error("Something went wrong 🤷‍♂️");
+          }
         });
     }
 
@@ -187,6 +234,7 @@ function Home() {
           setCity={setCity}
           loading={loading}
           setLoading={setLoading}
+          oneCallData={oneCallData}
         />
       ) : (
         <div></div>

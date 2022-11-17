@@ -144,6 +144,7 @@ const WeatherSVGContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  justify-content: flex-end;
 
   @media ${device.tablet} {
     align-items: center;
@@ -247,6 +248,7 @@ function WeatherBox({ weatherData }) {
           <MainTempContainer>
             <MainTempLeftContainer>
               {/* <MainTempDate>13 September, 7:40 am</MainTempDate> */}
+
               <MainTempDate>{myDate}</MainTempDate>
 
               <MainTemTopText>
@@ -264,10 +266,10 @@ function WeatherBox({ weatherData }) {
                 ⬇
               </MainTemTopText>
               {/* <MainTemTopText>
-                Humidity {Math.ceil(weatherData.main.humidity) + "% "}∘ Pressure{" "}
-                {Math.round((weatherData.main.pressure / 1013) * 100) / 100 +
-                  " atm"}
-              </MainTemTopText> */}
+                  Humidity {Math.ceil(weatherData.main.humidity) + "% "}∘ Pressure{" "}
+                  {Math.round((weatherData.main.pressure / 1013) * 100) / 100 +
+                    " atm"}
+                </MainTemTopText> */}
               <MainTempText>
                 {weatherData
                   ? Math.round(weatherData.main.temp) /*"°ᶜ"*/ + "°ᶜ"

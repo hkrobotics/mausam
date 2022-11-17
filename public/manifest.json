@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Mausam",
+  "name": "Mausam",
+  "description": "Mausam is a weather app that shows the weather of your current location and also the weather of your favourite locations.",
   "icons": [
     {
       "src": "favicon.ico",

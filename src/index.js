@@ -20,6 +20,7 @@ import {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <>
+    {/* <React.StrictMode> */}
 
     <Router>
       <Routes>
@@ -27,7 +28,10 @@ root.render(
         <Route path="/:location" element={<Home />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
+
     </Router>
+
+    {/* </React.StrictMode> */}
     {/* <NewHome /> */}
   </>
 );
